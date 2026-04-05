@@ -9,10 +9,10 @@ on:
 # Global Environment Variables
 env:
   DOCKER_IMAGE_NAME: "demo-app"
-  IMAGE_TAG: "v${{ github.run_number }}"
+  IMAGE_TAG: "github_v${{ github.run_number }}"
 
 jobs:
-  # STEP 1: CONTINUOUS INTEGRATION (Build Validation)
+  # STEP 1: CONTINUOUS INTEGRATION ( Build Validation)
   build:
     runs-on: ubuntu-latest
     steps:
