@@ -41,9 +41,9 @@ jobs:
           name: coverage-report       # Name of the zip file in GitHub UI
           path: htmlcov/              # Folder to be packaged
 # STEP 3: Scan (ONLY for Pull Requests, like GitLab merge_request_event)
-  scan_job:
+  scan:
     name: scan
-    needs: test_job
+    needs: test
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'pull_request' }}
     steps:
