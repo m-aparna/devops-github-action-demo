@@ -40,11 +40,24 @@ jobs:
         with:
           name: coverage-report       # Name of the zip file in GitHub UI
           path: htmlcov/              # Folder to be packaged
+# STEP 3: Scan (ONLY for Pull Requests, like GitLab merge_request_event)
+  scan:
+    name: scan
+    needs: test
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - name: Simulated security & quality scans for PR
+        run: |
+          echo "🔍 Running security & quality scans for PR"
+          echo "Checking dependencies..."
+          echo "Checking licenses..."
+          echo "Checking secrets..."
 
-  # STEP 3: CONTINUOUS DELIVERY (Pushing to Docker Hub)
+  # STEP 4: CONTINUOUS DELIVERY (Pushing to Docker Hub)
   release:
     needs: test
-    if: github.ref == 'refs/heads/main'
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -64,10 +77,10 @@ jobs:
           # docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:latest
           echo "✅ Released version ${{ env.IMAGE_TAG }} is now pushed to Docker Hub."
 
-  # STEP 4: CONTINUOUS DEPLOYMENT (Updating the "Non Production" Environment)
+  # STEP 5: CONTINUOUS DEPLOYMENT (Updating the "Non Production" Environment)
   deploy_non_production:
     needs: release # This job only starts after the image is successfully pushed
-    if: github.ref == 'refs/heads/main'
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     steps:
       - name: Simulated Cloud Trigger
