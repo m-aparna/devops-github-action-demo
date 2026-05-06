@@ -54,7 +54,7 @@ jobs:
           echo "Checking licenses..."
           echo "Checking secrets..."
 
-  # STEP 4: CONTINUOUS DELIVERY (Pushing to Docker Hub)
+  # STEP 4: CONTINUOUS DELIVERY (Push to Docker Hub)
   release:
     needs: test
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
